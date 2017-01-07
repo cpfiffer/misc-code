@@ -1,0 +1,67 @@
+---
+title: "Tibbles"
+date: "January 6, 2017"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+irist <- as_tibble(iris)
+```
+
+Tibbles never convert strings to factors and they always maintain input structure. You can give columns non-syntactically appropriate names by using backticks \`. You can also use `tribble()` when creating a tibble, which is a transposed tibble. 
+```u
+tribble(
+  ~x, ~y, ~z,
+  #--|--|----
+  "a", 2, 3.6,
+  "b", 1, 8.5
+)
+```
+
+Ugly ass bit of code, there. We can print a whole tibble by using the `print()` command.
+
+```
+irist %>% print (n=30, width = 10)
+```
+
+Working with the WHO dataset.
+
+```{r}
+who1 <- who %>%
+  gather (new_sp_m014:newrel_f65, key = "key", value = "cases", na.rm = TRUE)
+
+who1
+```
+
+We have a brand new tibble that's easier to read! Let's separate the key column out into something more useable.
+
+```{r}
+who2 <- who1 %>%
+  separate(col = key, into = c("New", "Type", "AgeGroup"), sep = "_") %>%
+  separate(col = `AgeGroup`, into = c("Gender", "AgeGroup"), sep = 1)
+
+who3 <- who2 %>%
+  select(-New, -iso2, -iso3)
+
+who3 %>% group_by(Type) %>% count()
+```
+
+And now for some visualizations of this data.
+
+```{r}
+who4 <- who3
+
+ggplot (who4) +
+  geom_bar(aes( x = AgeGroup, y = cases, fill = Gender), stat= "identity")
+
+```
+
+So we can see a large uptick in cases for the 25-34 range and a steady downslope in cases in descending order. We can also see that men are more heavily effected. What other kinds of quesitons can we answer? Let's find out which countries are the most heavily effected.
+
+```{r}
+who5 <- who3
+
+ggplot(who5) +
+  geom_jitter(aes(Type, cases), stat = "identity")
+```

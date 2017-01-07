@@ -1,0 +1,23 @@
+---
+title: "Relational Data"
+author: "Cameron Pfiffer"
+date: "January 7, 2017"
+output: html_document
+---
+
+```{r echo = FALSE, error=FALSE,message=FALSE}
+library(tidyverse)
+library(nycflights13)
+
+#Now we load the relevant datasets
+data(flights)
+data("airlines")
+data("airports")
+data("planes")
+data("weather")
+```
+
+Now, here's the columns for each data set.
+
+flights `r colnames(airlines)`
+
