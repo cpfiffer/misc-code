@@ -17,7 +17,30 @@ data("planes")
 data("weather")
 ```
 
-Now, here's the columns for each data set.
+```{r}
+weather
+airports
+```
+The link between weather and airports is the `faa` column in airports, which lists it as Newark's airport, and the `origin` column in weather. 
 
-flights `r colnames(airlines)`
+Let's make sure that each table's keys are truly unique.
+
+```{r}
+planes %>%
+  count(tailnum) %>%
+  filter(n > 1)
+
+weather %>%
+  count(year, month,day, hour, origin) %>%
+  filter(n > 1)
+
+#Hooray, each one is unique and special, like a lovely snowflake. Let's add a key to flights so we can identify each flight.
+
+flights2 <- flights %>%
+  mutate(key = row_number()) %>%
+  select(-origin, -dest) %>%
+  left_join(airlines, by = "carrier")
+
+flights2
+```
 

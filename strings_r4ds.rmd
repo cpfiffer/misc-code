@@ -1,0 +1,26 @@
+---
+title: "Strings"
+author: "Cameron Pfiffer"
+date: "January 7, 2017"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(stringr)
+```
+
+You can make strings with ' or ", there's no difference. Usually it's best to use quotes because it's less likely to show up in a string.
+
+```{r}
+x <- c("apple", "banana", "pear")
+str_view(x,"a.")
+```
+
+The above code is pretty awesome. It matches anything that has an "a" followed by any other character except for a newline. We can use a `^` symbol to refer to the start of a string and a `$` to refer to the end of the string. Some useful others:
+
+* `\d` matches any digit
+* `\s` matches any whitespace
+* `[abc]` matchs a, b, or c
+* `[^abc]` matches anything except a, b, or c
+

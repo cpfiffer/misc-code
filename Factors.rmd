@@ -1,0 +1,46 @@
+---
+title: "Factors"
+author: "Cameron Pfiffer"
+date: "January 8, 2017"
+output: html_document
+---
+
+Factors are categorical variables with a defined set of possibilities, also called levels.
+
+```{R}
+library(tidyverse)
+library(forcats)
+data(gss_cat)
+```
+
+```{R}
+relig <- gss_cat %>% #Create o variable called relig, and start with gss_cat
+  group_by(relig) %>% #Group it by religion
+  summarise(age = mean(age, na.rm=TRUE), #Find average age for each religion
+            tvhours = mean(tvhours, na.rm=TRUE), #Average tv hours for each religion
+            n= n()) #Number of people in each religion
+
+relig %>%
+  ggplot() +
+  geom_point(aes(age, fct_reorder(relig, age)))
+
+relig %>%
+  ggplot() +
+  geom_point(aes(n, fct_reorder(relig, n)))
+
+
+```
+
+
+
+This is `gss_cat`, a table with 9 variables and 21,000 observations. The variables:
+
+* Year, measured every 2 years between 2000 and 2014. The number of observations per year is about 2500, but in 2006 we had 4500 and in 2012 we had only 1974.
+* Marital status. Answers are no answer, never married, separated, divorced, widowed, and married.
+* Age, which goes from age 18-88.
+* Race, which is black, white, or other. Not totally comprehensive.
+* Income, which is mostly annual income ranges and some variables for refusal/ignorance/not applicable.
+* Party id, which is the political affilition of each responder. Covers the whole spectrum.
+* Religion. Self-explanatory.
+
+The basics of `fct_reorder()` are this: the first argument is the factor you want to change, the second is the vector you want to use to reorder the first.
