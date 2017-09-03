@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+# Neural Networks
+The study of neural networks in finance is in its infancy. Most of the literature is scattered on the efficacy of NN predictive ability.
+
+Obviously, the nonstationarity inherent in any time-series asset pricing data makes neural networks a natural fit, but a lot of the literature is unclear on how effective neural networks are in producing point estimates. Almost all the literature reviews I've read so far (20-35) cite numerous studies that find scattered evidence, and such reviews are littered with a graveyard of studies that often simply faily to improve on random-walk models, though there are 3-5 studies that have shown minor improvements over random-walk and other models.
+
+Much of this literature on neural network forecasting uses only daily samples, which is arguably not sufficient for the ultra-high-frequency data found in modern financial markets. The predictive power of such infrequent data is arguable, as [this paper](http://www.sven-crone.com/papers/Crone,%20Kourentzes%20(2008)%20Forecasting%20high-frequency%20Time%20Series%20with%20Neural%20Networks%20-%20an%20analysis%20of%20modelling%20challenges%20from%20increasing%20data%20frequency%20DMIN08%20draft%20v3.pdf) by researchers at Lancaster show - in short, even daily data (as compared to monthly and weekly) can be very computationally expensive to calculate and the daily data doesn't show too much of an increase in SMAPE. It should be noted that tick-by-tick data hasn't been studied very thoroughly, primarily due to complexity, computational resources, and data availability. Market makers can do enormously well for themselves if they're even a tick ahead 51% of the time. In the high-frequency space, [a study](https://link.springer.com/chapter/10.1007/978-3-319-42297-8_40) found that tick-by-tick data could be used to predict AAPL price direction 66% of the time, and a trading strategy using the network yielded an 81% successful trade ratio. 
+
+Perhaps the most important work in neural networks for use in market microstructure is built off of order flow content, as in Lyons and Evans (1999), Yao (1997), and Covrig and Melvin (1998). Each of these papers found order flow to be a highly significant variable in determining exchange rates. Any research using a rich data source like dealer data would be able to reconstruct order flow (among other valuable variables) for use in a variety of models, including neural networks. 
+
+The Bank of Canada published [a paper](http://machine-learning.martinsewell.com/ann/GrYa00.pdf) that is easily the most relevant to the topic of discussion, entitled _The Application of Artificial Neural Networks to Exchange Rate Forecasting: The Role of Market Microstructure Variables_. they use order flow data from their own dealings, categorized by spot, forward, and future. Their forecasting period is still quite long, they use the past week's data to forecast the next day's close. They primarily focus on spot transactions due to the short-term nature of their forecasting. They break their customers out into:
+
+* Non-financial customers
+* Non-dealer financial institutions in Canada
+* Foreign institutions, including FX dealers
+* Interbank trades
+
+They also include a number of external variables, such as changes in crude oil prices and commercial paper rates. Their findings show that their neural network was better able to predict exchange rate changes better than the random-walk and linear models, though they note that RMSE is often not the best metric for evaluating price estimates (RMSE has been commonly used in the NN literature), and posit that direction of price change is more efficacious. Their network, similar to other studies, shows a 60% correct direction prediction.
+
+[A pair of researchers in Hungary](https://pp.bme.hu/eecs/article/viewFile/7165/6177) used a neural network to perform high-frequency trades, accounting for the bid/ask spread. They made a small but respectable profit of 5-8% over a six-month period, but their methodology was particularly unique - they used (in their simplest model) only the past midpoint pricing series. They broaden the model out to use two neural networks to compute bid and ask spreads, where $bid = f(bid_{t-1}, bid_{t-2}, ..., bid_{t-j}, ask_{t-1}, ask_{t-2}, ..., ask_{t-j})$, and the same for the ask. In some ways this mirrors a primitive form of Hasbrouck's VAR model for predicting quote revisions. I suspect it could be modified to include similar indicators to assist in the "Pricer" mechanism that Credit Suisse uses. 
+
+I was unable to find a comprehensive, truly well thought out paper of particular interest to market makers in regards to neural networks. Spread modeling using neural networks is a fledgling field at best. I suspect this is mostly due to the high costs in time, computation, and data availability, and many financial researchers can often "make do" with models that perform similarly with far less effort. It's an interesting field, certainly, and it's an area that has no studies by finance researchers with ultra-high-frequency data. Any research contributed to the field would likely be fascinating at the least, and spectacularly profitable at the most. 
